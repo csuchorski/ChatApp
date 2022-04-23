@@ -8,11 +8,14 @@
     <div class="form-inline w-50">
         <div class="form-group">
             <label for="nameInput" class="control-label">Input your name</label>
-            <input type="text" id="nameInput" class="form-control w-50" placeholder="Username" />
+            <input type="text" id="nameInput" class="form-control w-50" placeholder="Username"/>
         </div>
-        <button class="btn btn-primary" type="submit">Connect</button>
+        <button class="btn btn-primary m-2" type="submit">Connect</button>
+        <button class="btn btn-danger m-2" type="submit" disabled>Disconnect</button>
         <p id="infoPara">Ready to connect</p>
     </div>
-
 </div>
+
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/site.js"></script>
 
