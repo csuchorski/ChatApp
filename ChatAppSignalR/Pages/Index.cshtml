@@ -5,15 +5,36 @@
 }
 
 <div class="container">
-    <div class="form-inline w-50">
-        <div class="form-group">
-            <label for="nameInput" class="control-label">Input your name</label>
-            <input type="text" id="nameInput" class="form-control w-50" placeholder="Username"/>
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-inline w-50">
+                <div class="form-group">
+                    <label for="nameInput" class="control-label">Input your name</label>
+                    <input type="text" id="nameInput" class="form-control w-50" placeholder="Username" />
+                </div>
+                <button class="btn btn-primary m-2" type="submit">Connect</button>
+                <button class="btn btn-danger m-2" type="submit" disabled>Disconnect</button>
+                <p id="infoPara">Ready to connect</p>
+            </div>
         </div>
-        <button class="btn btn-primary m-2" type="submit">Connect</button>
-        <button class="btn btn-danger m-2" type="submit" disabled>Disconnect</button>
-        <p id="infoPara">Ready to connect</p>
+        <div class="col-sm">
+            <table class="table table-striped w-75 text-center">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody id="messageList">
+                    <tr>
+                        <td>Test</td>
+                        <td>Test</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
 </div>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
