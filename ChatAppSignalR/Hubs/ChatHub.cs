@@ -16,6 +16,11 @@ namespace ChatAppSignalR.Hubs
             await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room.");
         }
         
+        public async Task SendToAllUsers(string message)
+        {
+            await Clients.All.SendAsync("ReceiveMessage", message);
+        }
+
         public string FindRoom()
         {
             foreach(var room in groupNames)
