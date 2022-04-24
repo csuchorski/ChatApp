@@ -8,6 +8,7 @@ namespace ChatAppSignalR.Hubs
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            if(!groupNames.ContainsKey(roomName)) groupNames.Add(roomName, 0);
             groupNames[roomName]++;
             await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined the room.");
         }
@@ -22,6 +23,11 @@ namespace ChatAppSignalR.Hubs
         public async Task SendToAllUsers(string message)
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
+        }
+
+        public async Task SendToGroup(string message, string username, string groupName)
+        {
+            await Clients.Group(groupName).SendAsync("ReceiveMessage", message, username);
         }
 
         public string FindRoom()

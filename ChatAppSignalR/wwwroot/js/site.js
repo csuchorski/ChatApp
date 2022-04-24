@@ -2,6 +2,13 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
+const connBtn = document.getElementById("connectBtn");
+const messageBtn = document.getElementById("sendBtn");
+
+const nameInput = document.getElementById("usernameInput");
+const groupNamePara = document.getElementById("groupName");
+const messageInput = document.getElementById("messageVal");
+
 function start() {
     try {
         connection.start();
@@ -12,12 +19,12 @@ function start() {
     }
 };
 
-connection.on("ReceiveMessage", function (message) {
+connection.on("ReceiveMessage", function (message, user) {
     let messageRow = document.createElement("tr");
     messageRow.appendChild(document.createElement("td"));
     messageRow.appendChild(document.createElement("td"));
 
-    messageRow.firstChild.textContent = nameInput.value;
+    messageRow.firstChild.textContent = user;
     messageRow.lastChild.textContent = message;
 
     messageList.appendChild(messageRow);
@@ -25,4 +32,20 @@ connection.on("ReceiveMessage", function (message) {
 
 start();
 
-//connection.invoke("SendToAllUsers", "Welcome all!");
+connBtn.addEventListener('click', () => {
+    let userName = nameInput.value;
+    let roomName = connection.invoke("FindRoom");
+    if (roomName == "roomNull") {
+        connection.invoke("JoinRoom", userName);
+        groupNamePara.textContent = userName;
+    }
+    else {
+        connection.invoke("JoinRoom", roomName);
+        groupNamePara.textContent = roomName;
+    }
+})
+
+messageBtn.addEventListener('click', () => {
+    connection.invoke("SendToGroup", messageInput.value, nameInput.value, groupNamePara.textContent)
+})
+
