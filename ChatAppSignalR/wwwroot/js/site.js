@@ -49,6 +49,7 @@ connBtn.addEventListener('click', async () => {
     }
     connBtn.disabled = true;
     disBtn.disabled = false;
+    messageBtn.disabled = false;
 })
 
 disBtn.addEventListener('click', async () => {
@@ -56,6 +57,7 @@ disBtn.addEventListener('click', async () => {
     console.log("User left room");
     disBtn.disabled = true;
     connBtn.disabled = false;
+    messageBtn.disabled = true;
 })
 
 
