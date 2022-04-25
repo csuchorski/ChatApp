@@ -3,6 +3,7 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
 
 const connBtn = document.getElementById("connectBtn");
+const disBtn = document.getElementById("disconnectBtn");
 const messageBtn = document.getElementById("sendBtn");
 
 const nameInput = document.getElementById("usernameInput");
@@ -32,18 +33,31 @@ connection.on("ReceiveMessage", function (message, user) {
 
 start();
 
-connBtn.addEventListener('click', () => {
+connBtn.addEventListener('click', async () => {
     let userName = nameInput.value;
-    let roomName = connection.invoke("FindRoom");
+    let roomName = await connection.invoke("FindRoom");
+    console.log(roomName)
     if (roomName == "roomNull") {
-        connection.invoke("JoinRoom", userName);
-        groupNamePara.textContent = userName;
+        await connection.invoke("JoinRoom", userName)
+            .then(groupNamePara.innerText = userName);
+        debugger
     }
     else {
-        connection.invoke("JoinRoom", roomName);
-        groupNamePara.textContent = roomName;
+        await connection.invoke("JoinRoom", roomName)
+            .then(groupNamePara.innerText = roomName);
+        debugger
     }
+    connBtn.disabled = true;
+    disBtn.disabled = false;
 })
+
+disBtn.addEventListener('click', async () => {
+    await connection.invoke("LeaveRoom", groupNamePara.innerText);
+    console.log("User left room");
+    disBtn.disabled = true;
+    connBtn.disabled = false;
+})
+
 
 messageBtn.addEventListener('click', () => {
     connection.invoke("SendToGroup", messageInput.value, nameInput.value, groupNamePara.textContent)
