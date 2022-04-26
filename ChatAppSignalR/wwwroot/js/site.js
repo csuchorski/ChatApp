@@ -10,6 +10,9 @@ const nameInput = document.getElementById("usernameInput");
 const groupNamePara = document.getElementById("groupName");
 const messageInput = document.getElementById("messageVal");
 
+let userName;
+let roomName;
+
 function start() {
     try {
         connection.start();
@@ -34,22 +37,22 @@ connection.on("ReceiveMessage", function (message, user) {
 start();
 
 connBtn.addEventListener('click', async () => {
-    let userName = nameInput.value;
-    let roomName = await connection.invoke("FindRoom");
+    userName = nameInput.value;
+    roomName = await connection.invoke("FindRoom");
     console.log(roomName)
     if (roomName == "roomNull") {
         await connection.invoke("JoinRoom", userName)
             .then(groupNamePara.innerText = userName);
-        debugger
+        roomName = userName;
     }
     else {
         await connection.invoke("JoinRoom", roomName)
             .then(groupNamePara.innerText = roomName);
-        debugger
     }
     connBtn.disabled = true;
     disBtn.disabled = false;
     messageBtn.disabled = false;
+    nameInput.disabled = true;
 })
 
 disBtn.addEventListener('click', async () => {
@@ -58,10 +61,11 @@ disBtn.addEventListener('click', async () => {
     disBtn.disabled = true;
     connBtn.disabled = false;
     messageBtn.disabled = true;
+    nameInput.disabled = false;
 })
 
 
 messageBtn.addEventListener('click', () => {
-    connection.invoke("SendToGroup", messageInput.value, nameInput.value, groupNamePara.textContent)
+    connection.invoke("SendToGroup", messageInput.value, userName, roomName)
 })
 
