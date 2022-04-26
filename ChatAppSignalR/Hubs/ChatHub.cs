@@ -7,11 +7,21 @@ namespace ChatAppSignalR.Hubs
         private static Dictionary<string, byte> groupNames = new();
         public static Dictionary<string, byte> GroupNames { get => groupNames; set => groupNames = value; }
 
+        private static Dictionary<string, string> userAssignments = new();
+        public static Dictionary<string, string> UserAssignments { get => userAssignments; set => userAssignments = value; }
+
+        public async override Task<Task> OnDisconnectedAsync(Exception? exception)
+        {
+            await LeaveRoom(UserAssignments.GetValueOrDefault(Context.ConnectionId));
+
+            return base.OnDisconnectedAsync(exception);
+        }
         public async Task JoinRoom(string roomName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
-            if(!GroupNames.ContainsKey(roomName)) GroupNames.Add(roomName, 0);
+            if (!GroupNames.ContainsKey(roomName)) GroupNames.Add(roomName, 0);
             GroupNames[roomName]++;
+            UserAssignments.Add(Context.ConnectionId, roomName);
             await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined the room.");
         }
         public async Task LeaveRoom(string roomName)
@@ -19,6 +29,7 @@ namespace ChatAppSignalR.Hubs
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
             GroupNames[roomName]--;
             if (GroupNames[roomName] == 0) GroupNames.Remove(roomName);
+            UserAssignments.Remove(Context.ConnectionId);
             await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room.");
         }
 
@@ -36,7 +47,7 @@ namespace ChatAppSignalR.Hubs
         {
             if (!GroupNames.ContainsValue(1)) return "roomNull";
 
-            foreach(var room in GroupNames)
+            foreach (var room in GroupNames)
             {
                 if (room.Value == 1) return room.Key;
             }
@@ -44,5 +55,5 @@ namespace ChatAppSignalR.Hubs
             return "roomNull";
         }
 
-}
+    }
 }
