@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ChatAppSignalR.Hubs
 {
@@ -62,6 +64,18 @@ namespace ChatAppSignalR.Hubs
             }
 
             return "roomNull";
+        }
+
+        public string GetGroupNames()
+        {
+            var jsonResult = JsonSerializer.Serialize(GroupNames.Keys);
+            //System.Diagnostics.Debug.WriteLine(jsonResult);
+            return jsonResult;
+        }
+
+        public int GetNumOfUsers()
+        {
+            return UserAssignments.Count;
         }
 
     }

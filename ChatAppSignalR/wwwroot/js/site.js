@@ -9,6 +9,7 @@ const messageBtn = document.getElementById("sendBtn");
 const nameInput = document.getElementById("usernameInput");
 const groupNamePara = document.getElementById("groupName");
 const messageInput = document.getElementById("messageVal");
+const groupTbl = document.getElementById("groupNameTable");
 
 let userName;
 let roomName;
@@ -35,6 +36,8 @@ connection.on("ReceiveMessage", function (message, user) {
 })
 
 start();
+
+setInterval(updateGroups, 5000);
 
 connBtn.addEventListener('click', async () => {
     if (nameInput.value.length < 3) {
@@ -73,4 +76,21 @@ disBtn.addEventListener('click', async () => {
 messageBtn.addEventListener('click', () => {
     connection.invoke("SendToGroup", messageInput.value, userName, roomName)
 })
+async function updateGroups() {
+    let groupNames = JSON.parse(await connection.invoke("GetGroupNames"));
+    console.log(groupNames);
+    const tblRow = document.createElement("tr");
+    tblRow.appendChild(document.createElement("td"));
+    tblRow.appendChild(document.createElement("td"));
 
+    let index = 1;
+
+    groupTbl.querySelector("tbody").innerHTML = "";
+
+    groupNames.forEach(groupName => {
+        tblRow.firstChild.textContent = index++;
+        tblRow.lastChild.textContent = groupName;
+        groupTbl.querySelector("tbody").appendChild(tblRow);
+    })
+    console.log("Updated group list")
+}
