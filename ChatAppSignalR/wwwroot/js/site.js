@@ -37,22 +37,27 @@ connection.on("ReceiveMessage", function (message, user) {
 start();
 
 connBtn.addEventListener('click', async () => {
-    userName = nameInput.value;
-    roomName = await connection.invoke("FindRoom");
-    console.log(roomName)
-    if (roomName == "roomNull") {
-        await connection.invoke("JoinRoom", userName)
-            .then(groupNamePara.innerText = userName);
-        roomName = userName;
+    if (nameInput.value.length < 3) {
+        alert("Username must be at least 3 characters")
     }
     else {
-        await connection.invoke("JoinRoom", roomName)
-            .then(groupNamePara.innerText = roomName);
+        userName = nameInput.value;
+        roomName = await connection.invoke("FindRoom");
+        console.log(roomName)
+        if (roomName == "roomNull") {
+            await connection.invoke("JoinRoom", userName)
+                .then(groupNamePara.innerText = userName);
+            roomName = userName;
+        }
+        else {
+            await connection.invoke("JoinRoom", roomName)
+                .then(groupNamePara.innerText = roomName);
+        }
+        connBtn.disabled = true;
+        disBtn.disabled = false;
+        messageBtn.disabled = false;
+        nameInput.disabled = true;
     }
-    connBtn.disabled = true;
-    disBtn.disabled = false;
-    messageBtn.disabled = false;
-    nameInput.disabled = true;
 })
 
 disBtn.addEventListener('click', async () => {

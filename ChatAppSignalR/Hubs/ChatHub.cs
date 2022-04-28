@@ -12,7 +12,7 @@ namespace ChatAppSignalR.Hubs
 
         public async override Task<Task> OnDisconnectedAsync(Exception? exception)
         {
-            await LeaveRoom(UserAssignments.GetValueOrDefault(Context.ConnectionId));
+            await LeaveRoom(UserAssignments.GetValueOrDefault(Context.ConnectionId, ""));
 
             return base.OnDisconnectedAsync(exception);
         }
@@ -26,7 +26,16 @@ namespace ChatAppSignalR.Hubs
         }
         public async Task LeaveRoom(string roomName)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+            try
+            {
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, roomName);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+                return;
+            }
+
             GroupNames[roomName]--;
             if (GroupNames[roomName] == 0) GroupNames.Remove(roomName);
             UserAssignments.Remove(Context.ConnectionId);
