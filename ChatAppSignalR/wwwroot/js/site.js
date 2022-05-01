@@ -78,19 +78,18 @@ messageBtn.addEventListener('click', () => {
 })
 async function updateGroups() {
     let groupNames = JSON.parse(await connection.invoke("GetGroupNames"));
-    console.log(groupNames);
-    const tblRow = document.createElement("tr");
-    tblRow.appendChild(document.createElement("td"));
-    tblRow.appendChild(document.createElement("td"));
-
     let index = 1;
 
     groupTbl.querySelector("tbody").innerHTML = "";
 
-    groupNames.forEach(groupName => {
+    groupNames.forEach((groupName) => {
+        const tblRow = document.createElement("tr");
+        tblRow.appendChild(document.createElement("td"));
+        tblRow.appendChild(document.createElement("td"));
+
         tblRow.firstChild.textContent = index++;
         tblRow.lastChild.textContent = groupName;
         groupTbl.querySelector("tbody").appendChild(tblRow);
     })
-    console.log("Updated group list")
+    //console.log("Updated group list")
 }
