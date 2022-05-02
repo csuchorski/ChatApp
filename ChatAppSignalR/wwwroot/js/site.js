@@ -77,19 +77,24 @@ messageBtn.addEventListener('click', () => {
     connection.invoke("SendToGroup", messageInput.value, userName, roomName)
 })
 async function updateGroups() {
-    let groupNames = JSON.parse(await connection.invoke("GetGroupNames"));
+    let groupsJson = JSON.parse(await connection.invoke("GetGroupNamesAndCapacity"));
     let index = 1;
-
+    
     groupTbl.querySelector("tbody").innerHTML = "";
 
-    groupNames.forEach((groupName) => {
+    for (const [key, value] of Object.entries(groupsJson)) {
+
         const tblRow = document.createElement("tr");
+        tblRow.appendChild(document.createElement("td"));
         tblRow.appendChild(document.createElement("td"));
         tblRow.appendChild(document.createElement("td"));
 
         tblRow.firstChild.textContent = index++;
-        tblRow.lastChild.textContent = groupName;
+        tblRow.children[1].textContent = key;
+        tblRow.lastChild.textContent = `${value}/2`;
+
         groupTbl.querySelector("tbody").appendChild(tblRow);
-    })
-    //console.log("Updated group list")
+    }
+
+    console.log("Updated group list")
 }

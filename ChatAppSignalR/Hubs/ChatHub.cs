@@ -66,9 +66,9 @@ namespace ChatAppSignalR.Hubs
             return "roomNull";
         }
 
-        public string GetGroupNames()
+        public string GetGroupNamesAndCapacity()
         {
-            var jsonResult = JsonSerializer.Serialize(GroupNames.Keys);
+            var jsonResult = JsonSerializer.Serialize(GroupNames);
             //System.Diagnostics.Debug.WriteLine(jsonResult);
             return jsonResult;
         }
