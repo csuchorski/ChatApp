@@ -11,6 +11,8 @@ const groupNamePara = document.getElementById("groupName");
 const messageInput = document.getElementById("messageVal");
 const groupTbl = document.getElementById("groupNameTable");
 
+const buttonString = '<button type="submit" id="joinGroupFromListBtn" class="btn btn-primary">Join</button>';
+
 let userName;
 let roomName;
 
@@ -60,6 +62,7 @@ connBtn.addEventListener('click', async () => {
         disBtn.disabled = false;
         messageBtn.disabled = false;
         nameInput.disabled = true;
+        joinSpecificGroupBtn.disabled = false;
     }
 })
 
@@ -70,6 +73,7 @@ disBtn.addEventListener('click', async () => {
     connBtn.disabled = false;
     messageBtn.disabled = true;
     nameInput.disabled = false;
+    joinSpecificGroupBtn.disabled = false;
 })
 
 
@@ -88,10 +92,13 @@ async function updateGroups() {
         tblRow.appendChild(document.createElement("td"));
         tblRow.appendChild(document.createElement("td"));
         tblRow.appendChild(document.createElement("td"));
+        tblRow.appendChild(document.createElement("td"));
+
 
         tblRow.firstChild.textContent = index++;
         tblRow.children[1].textContent = key;
-        tblRow.lastChild.textContent = `${value}/2`;
+        tblRow.children[2].textContent = `${value}/2`;
+        tblRow.lastChild.innerHTML = buttonString;
 
         groupTbl.querySelector("tbody").appendChild(tblRow);
     }
