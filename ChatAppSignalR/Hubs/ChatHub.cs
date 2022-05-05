@@ -18,13 +18,19 @@ namespace ChatAppSignalR.Hubs
 
             return base.OnDisconnectedAsync(exception);
         }
-        public async Task JoinRoom(string roomName)
+        public async Task<string> JoinRoom(string roomName)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
             if (!GroupNames.ContainsKey(roomName)) GroupNames.Add(roomName, 0);
+            if (GroupNames[roomName] == 2)
+            {
+                return "failed";
+            }
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomName);
+            //if (!GroupNames.ContainsKey(roomName)) GroupNames.Add(roomName, 0);
             GroupNames[roomName]++;
             UserAssignments.Add(Context.ConnectionId, roomName);
             await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined the room.");
+            return "success";
         }
         public async Task LeaveRoom(string roomName)
         {

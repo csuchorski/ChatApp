@@ -11,7 +11,9 @@ const groupNamePara = document.getElementById("groupName");
 const messageInput = document.getElementById("messageVal");
 const groupTbl = document.getElementById("groupNameTable");
 
-const buttonString = '<button type="submit" id="joinGroupFromListBtn" class="btn btn-primary">Join</button>';
+const buttonString = '<button type="submit" class="btn btn-primary joinGroupFromListBtn">Join</button>';
+
+let groupJoinBtnCollection;
 
 let userName;
 let roomName;
@@ -62,7 +64,7 @@ connBtn.addEventListener('click', async () => {
         disBtn.disabled = false;
         messageBtn.disabled = false;
         nameInput.disabled = true;
-        joinSpecificGroupBtn.disabled = false;
+        //joinSpecificGroupBtn.disabled = false;
     }
 })
 
@@ -102,6 +104,16 @@ async function updateGroups() {
 
         groupTbl.querySelector("tbody").appendChild(tblRow);
     }
+
+    groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
+    var groupJoinBtnArray = [...groupJoinBtnCollection];
+    console.log(groupJoinBtnArray);
+    groupJoinBtnArray.forEach(btn => {
+        btn.addEventListener('click', function () {
+            let relatedGroup = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
+            console.log(relatedGroup);
+        })
+    })
 
     console.log("Updated group list")
 }
