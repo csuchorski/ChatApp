@@ -85,7 +85,7 @@ messageBtn.addEventListener('click', () => {
 async function updateGroups() {
     let groupsJson = JSON.parse(await connection.invoke("GetGroupNamesAndCapacity"));
     let index = 1;
-    
+
     groupTbl.querySelector("tbody").innerHTML = "";
 
     for (const [key, value] of Object.entries(groupsJson)) {
@@ -107,11 +107,22 @@ async function updateGroups() {
 
     groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
     var groupJoinBtnArray = [...groupJoinBtnCollection];
-    console.log(groupJoinBtnArray);
+
     groupJoinBtnArray.forEach(btn => {
-        btn.addEventListener('click', function () {
-            let relatedGroup = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
-            console.log(relatedGroup);
+        btn.addEventListener('click', async function () {
+            roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
+            const result = await connection.invoke("JoinRoom", roomName);
+            debugger;
+            if (result  == "failed") {
+                alert("Room full");
+            }
+            else {
+                userName = nameInput.value;
+                connBtn.disabled = true;
+                disBtn.disabled = false;
+                messageBtn.disabled = false;
+                nameInput.disabled = true;
+            }
         })
     })
 
