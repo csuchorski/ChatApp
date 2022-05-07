@@ -47,7 +47,7 @@ namespace ChatAppSignalR.Hubs
             GroupNames[roomName]--;
             if (GroupNames[roomName] == 0) GroupNames.Remove(roomName);
             UserAssignments.Remove(Context.ConnectionId);
-            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room.");
+            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room."); 
         }
 
         public async Task SendToAllUsers(string message)
@@ -83,6 +83,8 @@ namespace ChatAppSignalR.Hubs
         {
             return UserAssignments.Count;
         }
+
+
 
     }
 }

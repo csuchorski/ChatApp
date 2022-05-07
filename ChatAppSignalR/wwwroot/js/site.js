@@ -64,7 +64,6 @@ connBtn.addEventListener('click', async () => {
         disBtn.disabled = false;
         messageBtn.disabled = false;
         nameInput.disabled = true;
-        //joinSpecificGroupBtn.disabled = false;
     }
 })
 
@@ -75,7 +74,8 @@ disBtn.addEventListener('click', async () => {
     connBtn.disabled = false;
     messageBtn.disabled = true;
     nameInput.disabled = false;
-    joinSpecificGroupBtn.disabled = false;
+
+    groupNamePara.textContent = "";
 })
 
 
@@ -106,24 +106,32 @@ async function updateGroups() {
     }
 
     groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
-    var groupJoinBtnArray = [...groupJoinBtnCollection];
+    let groupJoinBtnArray = [...groupJoinBtnCollection];
 
     groupJoinBtnArray.forEach(btn => {
-        btn.addEventListener('click', async function () {
-            roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
-            const result = await connection.invoke("JoinRoom", roomName);
-            debugger;
-            if (result  == "failed") {
-                alert("Room full");
-            }
-            else {
-                userName = nameInput.value;
-                connBtn.disabled = true;
-                disBtn.disabled = false;
-                messageBtn.disabled = false;
-                nameInput.disabled = true;
-            }
-        })
+        if (groupNamePara.textContent != "") {
+            btn.disabled = true;
+        }
+        else {
+            btn.disabled = false;
+            btn.addEventListener('click', async function () {
+                roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
+                const result = await connection.invoke("JoinRoom", roomName);
+
+                if (result == "failed") {
+                    alert("Room full");
+                }
+                else {
+                    userName = nameInput.value;
+                    connBtn.disabled = true;
+                    disBtn.disabled = false;
+                    messageBtn.disabled = false;
+                    nameInput.disabled = true;
+                    groupNamePara.textContent = roomName;
+                }
+            })
+        }
+        
     })
 
     console.log("Updated group list")
