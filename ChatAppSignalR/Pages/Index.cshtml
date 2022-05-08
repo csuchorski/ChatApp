@@ -4,48 +4,102 @@
     ViewData["Title"] = "Home page";
 }
 
-<div class="container">
+@*<div class="container">
     <div class="row">
-        <div class="col-sm">
-            <div class="form-inline w-50">
-                <div class="form-group">
-                    <label for="nameInput" class="control-label">Input your name</label>
-                    <input type="text" id="usernameInput" required class="form-control w-50" placeholder="Username" />
+    <div class="col-sm">
+    <div class="form-inline w-50">
+    <div class="form-group">
+    <label for="nameInput" class="control-label">Input your name</label>
+    <input type="text" id="usernameInput" required class="form-control w-50" placeholder="Username" />
+    </div>
+    <button class="btn btn-primary m-2" id="connectBtn" type="submit">Join random room</button>
+    <button class="btn btn-primary m-2" id="sendBtn" type="submit" disabled>Send</button>
+    <button class="btn btn-danger m-2" id="disconnectBtn" type="submit" disabled>Disconnect</button>
+    <p id="groupName"></p>
+    <input type="text" id="messageVal" class="form-control w-50" />
+    </div>
+    <div>
+    <table class="table table-bordered" id="groupNameTable">
+    <thead>
+    <tr>
+    <th>Group number</th>
+    <th>Group name</th>
+    <th>Capacity</th>
+    <th>Controls</th>
+    </tr>
+    </thead>
+    <tbody></tbody>
+    </table>
+    </div>
+    </div>
+    <div class="col-sm">
+    <table class="table table-striped w-75 text-center">
+    <thead>
+    <tr>
+    <th>Username</th>
+    <th>Message</th>
+    </tr>
+    </thead>
+    <tbody id="messageList">
+    </tbody>
+    </table>
+    </div>
+    </div>
+    </div>*@
+
+<div class="container-fluid">
+    <div class="row d-flex justify-content-around">
+        <div class="col-7" id="messageColumn">
+            <div class="p-2">
+                <div class="row">
+                    <div class="col">
+                        <input type="text" id="usernameInput" class="form-control w-100" placeholder="Username" />
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary w-100" id="connectBtn" type="submit">Join random room</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-danger w-100" id="disconnectBtn" type="submit" disabled>Disconnect</button>
+                    </div>
                 </div>
-                <button class="btn btn-primary m-2" id="connectBtn" type="submit">Join random room</button>
-                <button class="btn btn-primary m-2" id="sendBtn" type="submit" disabled>Send</button>
-                <button class="btn btn-danger m-2" id="disconnectBtn" type="submit" disabled>Disconnect</button>
-                <p id="groupName"></p>
-                <input type="text" id="messageVal" class="form-control w-50" />
             </div>
-            <div>
-                <table class="table table-bordered" id="groupNameTable">
+            <div class="p-2" id="messageBoardSection">
+                <table class="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th>Group number</th>
-                            <th>Group name</th>
-                            <th>Capacity</th>
-                            <th>Controls</th>
+                            <th>Username</th>
+                            <th>Message</th>
                         </tr>
                     </thead>
-                    <tbody></tbody>
+                    <tbody id="messageList">
+                    </tbody>
                 </table>
             </div>
+            <div class="p-2">
+                <div class="row">
+                    <div class="col-8">
+                        <input type="text" id="messageVal" class="form-control" />
+                    </div>
+                    <div class="col-4">
+                        <button type="submit" id="sendBtn" class="btn-primary btn w-100">Send</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-sm">
-            <table class="table table-striped w-75 text-center">
+        <div class="col-4" id="groupSection">
+            <table class="table table-bordered" id="groupNameTable">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>Message</th>
+                        <th>Group number</th>
+                        <th>Group name</th>
+                        <th>Capacity</th>
+                        <th>Controls</th>
                     </tr>
                 </thead>
-                <tbody id="messageList">
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
-
 </div>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>

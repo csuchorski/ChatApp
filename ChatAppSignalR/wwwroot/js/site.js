@@ -7,7 +7,6 @@ const disBtn = document.getElementById("disconnectBtn");
 const messageBtn = document.getElementById("sendBtn");
 
 const nameInput = document.getElementById("usernameInput");
-const groupNamePara = document.getElementById("groupName");
 const messageInput = document.getElementById("messageVal");
 const groupTbl = document.getElementById("groupNameTable");
 
@@ -52,13 +51,11 @@ connBtn.addEventListener('click', async () => {
         roomName = await connection.invoke("FindRoom");
         console.log(roomName)
         if (roomName == "roomNull") {
-            await connection.invoke("JoinRoom", userName)
-                .then(groupNamePara.innerText = userName);
+            await connection.invoke("JoinRoom", userName);
             roomName = userName;
         }
         else {
-            await connection.invoke("JoinRoom", roomName)
-                .then(groupNamePara.innerText = roomName);
+            await connection.invoke("JoinRoom", roomName);
         }
         connBtn.disabled = true;
         disBtn.disabled = false;
@@ -68,20 +65,21 @@ connBtn.addEventListener('click', async () => {
 })
 
 disBtn.addEventListener('click', async () => {
-    await connection.invoke("LeaveRoom", groupNamePara.innerText);
+    await connection.invoke("LeaveRoom", roomName);
     console.log("User left room");
     disBtn.disabled = true;
     connBtn.disabled = false;
     messageBtn.disabled = true;
     nameInput.disabled = false;
 
-    groupNamePara.textContent = "";
 })
 
 
-messageBtn.addEventListener('click', () => {
-    connection.invoke("SendToGroup", messageInput.value, userName, roomName)
+messageBtn.addEventListener('click', async () => {
+    const roomName = await connection.invoke("GetGroupOfUser");
+    connection.invoke("SendToGroup", messageInput.value, userName, roomName);
 })
+
 async function updateGroups() {
     let groupsJson = JSON.parse(await connection.invoke("GetGroupNamesAndCapacity"));
     let index = 1;
@@ -109,30 +107,21 @@ async function updateGroups() {
     let groupJoinBtnArray = [...groupJoinBtnCollection];
 
     groupJoinBtnArray.forEach(btn => {
-        if (groupNamePara.textContent != "") {
-            btn.disabled = true;
-        }
-        else {
-            btn.disabled = false;
-            btn.addEventListener('click', async function () {
-                roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
-                const result = await connection.invoke("JoinRoom", roomName);
+        btn.disabled = false;
+        btn.addEventListener('click', async function () {
+            roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
+            const result = await connection.invoke("JoinRoom", roomName);
 
-                if (result == "failed") {
-                    alert("Room full");
-                }
-                else {
-                    userName = nameInput.value;
-                    connBtn.disabled = true;
-                    disBtn.disabled = false;
-                    messageBtn.disabled = false;
-                    nameInput.disabled = true;
-                    groupNamePara.textContent = roomName;
-                }
-            })
-        }
-        
+            if (result == "failed") {
+                alert("Room full");
+            }
+            else {
+                userName = nameInput.value;
+                connBtn.disabled = true;
+                disBtn.disabled = false;
+                messageBtn.disabled = false;
+                nameInput.disabled = true;
+            }
+        })
     })
-
-    console.log("Updated group list")
 }

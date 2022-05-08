@@ -84,7 +84,12 @@ namespace ChatAppSignalR.Hubs
             return UserAssignments.Count;
         }
 
-
+        public string GetGroupOfUser()
+        {
+            var room = UserAssignments[Context.ConnectionId];
+            if (room == null) return "";
+            return room;
+        }
 
     }
 }
