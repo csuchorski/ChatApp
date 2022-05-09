@@ -12,7 +12,8 @@ const groupTbl = document.getElementById("groupNameTable");
 
 const buttonString = '<button type="submit" class="btn btn-primary joinGroupFromListBtn">Join</button>';
 
-let groupJoinBtnCollection;
+let groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
+let groupJoinBtnArray;
 
 let userName;
 let roomName;
@@ -47,6 +48,11 @@ connBtn.addEventListener('click', async () => {
         alert("Username must be at least 3 characters")
     }
     else {
+        if (await connection.invoke("GetGroupOfUser") != "") {
+            alert("User already in group!");
+            return;
+        }
+
         userName = nameInput.value;
         roomName = await connection.invoke("FindRoom");
         console.log(roomName)
@@ -61,6 +67,12 @@ connBtn.addEventListener('click', async () => {
         disBtn.disabled = false;
         messageBtn.disabled = false;
         nameInput.disabled = true;
+        if (groupJoinBtnCollection != null) {
+            groupJoinBtnArray = [...groupJoinBtnCollection];
+            groupJoinBtnArray.forEach(btn => {
+                btn.disabled = true;
+            })
+        }
     }
 })
 
@@ -104,7 +116,7 @@ async function updateGroups() {
     }
 
     groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
-    let groupJoinBtnArray = [...groupJoinBtnCollection];
+    groupJoinBtnArray = [...groupJoinBtnCollection];
 
     groupJoinBtnArray.forEach(btn => {
         btn.disabled = false;
