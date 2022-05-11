@@ -29,7 +29,7 @@ namespace ChatAppSignalR.Hubs
             //if (!GroupNames.ContainsKey(roomName)) GroupNames.Add(roomName, 0);
             GroupNames[roomName]++;
             UserAssignments.Add(Context.ConnectionId, roomName);
-            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined the room.");
+            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} joined the room.", "Server");
             return "success";
         }
         public async Task LeaveRoom(string roomName)
@@ -47,7 +47,7 @@ namespace ChatAppSignalR.Hubs
             GroupNames[roomName]--;
             if (GroupNames[roomName] == 0) GroupNames.Remove(roomName);
             UserAssignments.Remove(Context.ConnectionId);
-            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room."); 
+            await Clients.Group(roomName).SendAsync("ReceiveMessage", $"{Context.ConnectionId} left the room.", "Server"); 
         }
 
         public async Task SendToAllUsers(string message)

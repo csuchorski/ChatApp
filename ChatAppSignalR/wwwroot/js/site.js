@@ -48,11 +48,6 @@ connBtn.addEventListener('click', async () => {
         alert("Username must be at least 3 characters")
     }
     else {
-        if (await connection.invoke("GetGroupOfUser") != "") {
-            alert("User already in group!");
-            return;
-        }
-
         userName = nameInput.value;
         roomName = await connection.invoke("FindRoom");
         console.log(roomName)
@@ -118,22 +113,28 @@ async function updateGroups() {
     groupJoinBtnCollection = document.getElementsByClassName("joinGroupFromListBtn");
     groupJoinBtnArray = [...groupJoinBtnCollection];
 
-    groupJoinBtnArray.forEach(btn => {
-        btn.disabled = false;
-        btn.addEventListener('click', async function () {
-            roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
-            const result = await connection.invoke("JoinRoom", roomName);
+        groupJoinBtnArray.forEach(btn => {
+            btn.addEventListener('click', async function () {
+                if (await connection.invoke("GetGroupOfUser") != "") {
+                    alert("User already in group!");
+                }
+                else {
+                    roomName = btn.parentElement.previousElementSibling.previousElementSibling.textContent;
+                    const result = await connection.invoke("JoinRoom", roomName);
 
-            if (result == "failed") {
-                alert("Room full");
-            }
-            else {
-                userName = nameInput.value;
-                connBtn.disabled = true;
-                disBtn.disabled = false;
-                messageBtn.disabled = false;
-                nameInput.disabled = true;
-            }
+                    if (result == "failed") {
+                        alert("Room full");
+                    }
+                    else {
+                        userName = nameInput.value;
+                        connBtn.disabled = true;
+                        disBtn.disabled = false;
+                        messageBtn.disabled = false;
+                        nameInput.disabled = true;
+                    }
+                }
+            })
         })
-    })
 }
+
+
