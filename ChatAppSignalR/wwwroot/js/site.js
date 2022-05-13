@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chathub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/chatroom").build();
 
 const connBtn = document.getElementById("connectBtn");
 const disBtn = document.getElementById("disconnectBtn");

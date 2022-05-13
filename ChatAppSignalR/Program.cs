@@ -28,6 +28,6 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/Chatroom");
 
 app.Run();
