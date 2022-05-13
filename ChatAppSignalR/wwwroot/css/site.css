@@ -27,7 +27,19 @@ body {
 
 #messageBoardSection{
     flex:1 1 0;
+    overflow-y:auto;
+    overflow-x:visible;
 }
+
+#messageList > td:nth-of-type(1){
+    width:min-content;
+}
+
+
+#messageList > td:nth-of-type(2) {
+    overflow-wrap: anywhere;
+}
+
 
 #groupSection {
     border: 1px black solid;
